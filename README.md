@@ -130,14 +130,13 @@ The dashboard uses a combination of:
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
+## Image
+![GenelBakis](https://github.com/user-attachments/assets/2bfaae1a-5a84-424b-a783-e0b65efa1c14)
+![MusteriAnaliz](https://github.com/user-attachments/assets/94c05e99-1d0a-45a4-95be-ffa142916898)
+![UrunYonetim](https://github.com/user-attachments/assets/aa29bbe7-e8a8-405a-b66a-f200d401db3d)
+
 ## Acknowledgments
 
 - Built with [R Shiny](https://shiny.rstudio.com/)
 - Visualizations powered by [ggplot2](https://ggplot2.tidyverse.org/) and [plotly](https://plotly.com/r/)
 - Data tables implemented with [DT](https://rstudio.github.io/DT/)
-
-## Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
-
-Project Link: [https://github.com/yourusername/r-shiny-sales-dashboard](https://github.com/yourusername/r-shiny-sales-dashboard)
