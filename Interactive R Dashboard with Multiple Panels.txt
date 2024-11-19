@@ -1,0 +1,228 @@
+# Gerekli kutuphaneler
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(ggplot2)
+library(dplyr)
+library(plotly)
+
+# Ornek veri setleri
+sales_data <- data.frame(
+  Date = seq.Date(from = as.Date("2023-01-01"), by = "month", length.out = 12),
+  Revenue = round(runif(12, 10000, 50000)),
+  Profit = round(runif(12, 5000, 25000)),
+  Category = sample(c("Electronics", "Clothing", "Food"), 12, replace = TRUE)
+)
+
+customer_data <- data.frame(
+  CustomerID = 1:100,
+  Age = sample(18:70, 100, replace = TRUE),
+  Gender = sample(c("M", "F"), 100, replace = TRUE),
+  PurchaseAmount = round(runif(100, 100, 1000))
+)
+
+product_data <- data.frame(
+  ProductID = 1:50,
+  Name = paste("Product", 1:50),
+  Stock = sample(0:1000, 50),
+  Price = round(runif(50, 10, 500), 2)
+)
+
+# UI tanimi
+ui <- dashboardPage(
+  dashboardHeader(title = "Satis Dashboard"),
+  
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Genel Bakis", tabName = "overview", icon = icon("dashboard")),
+      menuItem("Musteri Analizi", tabName = "customers", icon = icon("users")),
+      menuItem("Urun Yonetimi", tabName = "products", icon = icon("box"))
+    )
+  ),
+  
+  dashboardBody(
+    tabItems(
+      # Sayfa 1: Genel Bakis
+      tabItem(tabName = "overview",
+        fluidRow(
+          # Ozet Istatistikler
+          valueBoxOutput("total_revenue_box"),
+          valueBoxOutput("avg_profit_box"),
+          valueBoxOutput("transaction_box")
+        ),
+        fluidRow(
+          # Grafik ve Tablo
+          box(
+            title = "Aylik Gelir Trendi",
+            status = "primary",
+            plotlyOutput("revenue_plot")
+          ),
+          box(
+            title = "Satis Ozeti",
+            status = "info",
+            DTOutput("sales_table")
+          )
+        )
+      ),
+      
+      # Sayfa 2: Musteri Analizi
+      tabItem(tabName = "customers",
+        fluidRow(
+          box(
+            title = "Yas Dagilimi",
+            status = "warning",
+            plotOutput("age_dist")
+          ),
+          box(
+            title = "Cinsiyet Dagilimi",
+            status = "success",
+            plotOutput("gender_dist")
+          )
+        ),
+        fluidRow(
+          box(
+            title = "Musteri Detaylari",
+            status = "primary",
+            DTOutput("customer_table"),
+            width = 12
+          )
+        )
+      ),
+      
+      # Sayfa 3: Urun Yonetimi
+      tabItem(tabName = "products",
+        fluidRow(
+          box(
+            title = "Stok Durumu",
+            status = "danger",
+            plotlyOutput("stock_plot")
+          ),
+          box(
+            title = "Fiyat Analizi",
+            status = "info",
+            plotlyOutput("price_plot")
+          )
+        ),
+        fluidRow(
+          box(
+            title = "Urun Listesi",
+            status = "primary",
+            DTOutput("product_table"),
+            width = 12
+          )
+        )
+      )
+    )
+  )
+)
+
+# Server mantigi
+server <- function(input, output) {
+  # Ozet Istatistik Kutulari
+  output$total_revenue_box <- renderValueBox({
+    valueBox(
+      paste0("TL ", format(sum(sales_data$Revenue), big.mark = ",")),
+      "Toplam Gelir",
+      icon = icon("money-bill"),
+      color = "green"
+    )
+  })
+  
+  output$avg_profit_box <- renderValueBox({
+    valueBox(
+      paste0("TL ", format(mean(sales_data$Profit), big.mark = ",")),
+      "Ortalama Kar",
+      icon = icon("chart-line"),
+      color = "purple"
+    )
+  })
+  
+  output$transaction_box <- renderValueBox({
+    valueBox(
+      nrow(customer_data),
+      "Toplam Islem",
+      icon = icon("shopping-cart"),
+      color = "blue"
+    )
+  })
+  
+  # Gelir Trendi Grafigi
+  output$revenue_plot <- renderPlotly({
+    p <- ggplot(sales_data, aes(x = Date, y = Revenue)) +
+      geom_line(color = "#2C3E50") +
+      geom_point(color = "#E74C3C") +
+      theme_minimal() +
+      labs(title = "Aylik Gelir Trendi",
+           x = "Tarih",
+           y = "Gelir (TL)")
+    ggplotly(p)
+  })
+  
+  # Satis Tablosu
+  output$sales_table <- renderDT({
+    datatable(sales_data,
+             options = list(pageLength = 5),
+             rownames = FALSE)
+  })
+  
+  # Yas Dagilimi Grafigi
+  output$age_dist <- renderPlot({
+    ggplot(customer_data, aes(x = Age)) +
+      geom_histogram(fill = "#3498DB", bins = 20) +
+      theme_minimal() +
+      labs(title = "Musteri Yas Dagilimi",
+           x = "Yas",
+           y = "Musteri Sayisi")
+  })
+  
+  # Cinsiyet Dagilimi Grafigi
+  output$gender_dist <- renderPlot({
+    ggplot(customer_data, aes(x = Gender, fill = Gender)) +
+      geom_bar() +
+      scale_fill_manual(values = c("#E74C3C", "#2ECC71")) +
+      theme_minimal() +
+      labs(title = "Cinsiyet Dagilimi",
+           x = "Cinsiyet",
+           y = "Musteri Sayisi")
+  })
+  
+  # Musteri Tablosu
+  output$customer_table <- renderDT({
+    datatable(customer_data,
+             options = list(pageLength = 10),
+             rownames = FALSE)
+  })
+  
+  # Stok Durumu Grafigi
+  output$stock_plot <- renderPlotly({
+    p <- ggplot(product_data, aes(x = reorder(Name, -Stock), y = Stock)) +
+      geom_bar(stat = "identity", fill = "#E67E22") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      labs(title = "Urun Stok Durumu",
+           x = "Urun",
+           y = "Stok Miktari")
+    ggplotly(p)
+  })
+  
+  # Fiyat Analizi Grafigi
+  output$price_plot <- renderPlotly({
+    p <- ggplot(product_data, aes(x = Price)) +
+      geom_density(fill = "#9B59B6", alpha = 0.5) +
+      theme_minimal() +
+      labs(title = "Urun Fiyat Dagilimi",
+           x = "Fiyat (TL)",
+           y = "Yogunluk")
+    ggplotly(p)
+  })
+  
+  # Urun Tablosu
+  output$product_table <- renderDT({
+    datatable(product_data,
+             options = list(pageLength = 10),
+             rownames = FALSE)
+  })
+}
+
+# Uygulamayi calistir
+shinyApp(ui = ui, server = server)
