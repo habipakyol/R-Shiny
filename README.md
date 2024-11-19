@@ -4,53 +4,54 @@
 ![Shiny](https://img.shields.io/badge/Shiny-blue?style=for-the-badge)
 ![Dashboard](https://img.shields.io/badge/Dashboard-orange?style=for-the-badge)
 
-Interactive sales dashboard built with R Shiny, offering comprehensive analytics and visualization tools for sales data, customer insights, and product management.
+
+A comprehensive sales analytics dashboard built with R Shiny, providing real-time insights into sales performance, customer behavior, and product management.
+
+![GenelBakis](https://github.com/user-attachments/assets/2bfaae1a-5a84-424b-a783-e0b65efa1c14)
+![MusteriAnaliz](https://github.com/user-attachments/assets/94c05e99-1d0a-45a4-95be-ffa142916898)
+![UrunYonetim](https://github.com/user-attachments/assets/aa29bbe7-e8a8-405a-b66a-f200d401db3d)
 
 ## Features
 
-- 📊 **Sales Overview**
-  - Real-time total revenue tracking
-  - Monthly profit analysis
-  - Transaction monitoring
-  - Interactive revenue trend charts
+- **General Overview (Genel Bakış)**
+  - Total revenue and profit metrics
+  - Monthly revenue trend analysis
+  - Interactive sales summary table
+  - Key performance indicators in value boxes
 
-- 👥 **Customer Analytics**
-  - Demographic distribution
-  - Age analysis
-  - Gender distribution
-  - Detailed customer data tables
+- **Customer Analysis (Müşteri Analizi)**
+  - Age distribution visualization
+  - Gender distribution analysis
+  - Detailed customer information table
+  - Purchase behavior insights
 
-- 📦 **Product Management**
-  - Stock level monitoring
+- **Product Management (Ürün Yönetimi)**
+  - Real-time stock level monitoring
   - Price distribution analysis
-  - Complete product inventory
-  - Interactive stock visualizations
+  - Comprehensive product listing
+  - Interactive stock visualization
 
-## Prerequisites
-
-Before running this dashboard, ensure you have R and RStudio installed on your system. You'll also need the following R packages:
+## Dependencies
 
 ```R
-install.packages(c(
-  "shiny",
-  "shinydashboard",
-  "DT",
-  "ggplot2",
-  "dplyr",
-  "plotly"
-))
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(ggplot2)
+library(dplyr)
+library(plotly)
 ```
 
 ## Installation
 
-1. Clone this repository:
+1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/r-shiny-sales-dashboard.git
 ```
 
-2. Open the project in RStudio:
-```bash
-cd r-shiny-sales-dashboard
+2. Install required R packages:
+```R
+install.packages(c("shiny", "shinydashboard", "DT", "ggplot2", "dplyr", "plotly"))
 ```
 
 3. Run the application:
@@ -58,65 +59,44 @@ cd r-shiny-sales-dashboard
 shiny::runApp()
 ```
 
-## Usage
-
-The dashboard is divided into three main sections:
-
-### 1. General Overview
-- View total revenue, average profit, and transaction counts
-- Analyze monthly revenue trends
-- Access detailed sales summaries
-
-### 2. Customer Analysis
-- Explore customer age distribution
-- Analyze gender demographics
-- Access detailed customer information
-
-### 3. Product Management
-- Monitor stock levels
-- Analyze price distributions
-- View complete product inventory
-
 ## Data Structure
 
 The dashboard uses three main data frames:
 
-1. **sales_data:**
+1. **Sales Data**
    - Date
    - Revenue
    - Profit
    - Category
 
-2. **customer_data:**
-   - CustomerID
+2. **Customer Data**
+   - Customer ID
    - Age
    - Gender
-   - PurchaseAmount
+   - Purchase Amount
 
-3. **product_data:**
-   - ProductID
+3. **Product Data**
+   - Product ID
    - Name
    - Stock
    - Price
 
-## Customization
+## Usage
 
-### Modifying Data Sources
+1. **General Overview Tab**
+   - Monitor total revenue and average profit
+   - Track monthly sales trends
+   - View detailed sales records
 
-To use your own data, modify the data frame creation sections in the code:
+2. **Customer Analysis Tab**
+   - Analyze customer demographics
+   - Review purchase patterns
+   - Export customer data
 
-```R
-sales_data <- your_sales_data
-customer_data <- your_customer_data
-product_data <- your_product_data
-```
-
-### Styling
-
-The dashboard uses a combination of:
-- shinydashboard themes
-- Custom CSS
-- plotly interactive features
+3. **Product Management Tab**
+   - Monitor stock levels
+   - Analyze price distributions
+   - Manage product inventory
 
 ## Contributing
 
@@ -129,14 +109,3 @@ The dashboard uses a combination of:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Image
-![GenelBakis](https://github.com/user-attachments/assets/2bfaae1a-5a84-424b-a783-e0b65efa1c14)
-![MusteriAnaliz](https://github.com/user-attachments/assets/94c05e99-1d0a-45a4-95be-ffa142916898)
-![UrunYonetim](https://github.com/user-attachments/assets/aa29bbe7-e8a8-405a-b66a-f200d401db3d)
-
-## Acknowledgments
-
-- Built with [R Shiny](https://shiny.rstudio.com/)
-- Visualizations powered by [ggplot2](https://ggplot2.tidyverse.org/) and [plotly](https://plotly.com/r/)
-- Data tables implemented with [DT](https://rstudio.github.io/DT/)
